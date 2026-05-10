@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Votación hoteles Hanoi - Viaje Vietnam 2026</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #17202a;
+      --muted: #5d6d7e;
+      --line: #d7dee8;
+      --surface: #ffffff;
+      --paper: #f4f7fb;
+      --brand: #0f766e;
+      --brand-dark: #115e59;
+      --accent: #f59e0b;
+      --danger: #b91c1c;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--paper);
+      color: var(--ink);
+      line-height: 1.5;
+    }
+
+    header {
+      background: var(--brand);
+      color: #ffffff;
+      padding: 26px 18px 24px;
+    }
+
+    header > div,
+    main {
+      width: min(820px, 100%);
+      margin: 0 auto;
+    }
+
+    h1 {
+      margin: 0 0 12px;
+      font-size: 26px;
+      line-height: 1.15;
+      letter-spacing: 0;
+    }
+
+    h2 {
+      margin: 0 0 10px;
+      font-size: 20px;
+      line-height: 1.25;
+      letter-spacing: 0;
+    }
+
+    p {
+      margin: 0 0 12px;
+    }
+
+    main {
+      padding: 18px;
+    }
+
+    section {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 18px;
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      margin: 14px 0 7px;
+      font-weight: 750;
+    }
+
+    input[type="text"],
+    textarea,
+    select {
+      width: 100%;
+      min-height: 48px;
+      border: 1px solid #bcc8d6;
+      border-radius: 8px;
+      padding: 11px 12px;
+      background: #ffffff;
+      color: var(--ink);
+      font: inherit;
+    }
+
+    textarea {
+      min-height: 108px;
+      resize: vertical;
+    }
+
+    a {
+      color: var(--brand-dark);
+      font-weight: 750;
+      overflow-wrap: anywhere;
+    }
+
+    .note,
+    .helper {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .links {
+      display: grid;
+      gap: 8px;
+      margin: 10px 0;
+    }
+
+    .link-button {
+      display: block;
+      border: 1px solid #99d6d0;
+      border-radius: 8px;
+      padding: 11px 12px;
+      background: #ecfdfb;
+      text-decoration: none;
+    }
+
+    .score-row {
+      display: grid;
+      grid-template-columns: 1fr 48px;
+      gap: 12px;
+      align-items: center;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--brand);
+    }
+
+    .score-value {
+      display: grid;
+      min-width: 48px;
+      min-height: 42px;
+      place-items: center;
+      border-radius: 8px;
+      background: #e0f2f1;
+      color: var(--brand-dark);
+      font-weight: 850;
+    }
+
+    .scale-labels {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .actions {
+      display: grid;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    button {
+      width: 100%;
+      min-height: 52px;
+      border: 0;
+      border-radius: 8px;
+      padding: 13px 15px;
+      background: #16a34a;
+      color: #ffffff;
+      cursor: pointer;
+      font: inherit;
+      font-size: 17px;
+      font-weight: 850;
+    }
+
+    button.secondary {
+      background: var(--brand);
+    }
+
+    button:hover {
+      filter: brightness(0.95);
+    }
+
+    .error {
+      display: none;
+      margin-top: 12px;
+      color: var(--danger);
+      font-weight: 750;
+    }
+
+    .summary {
+      display: none;
+      white-space: pre-wrap;
+      background: #fff7ed;
+      border-color: #fed7aa;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>Votación hoteles Hanoi - Viaje Vietnam 2026</h1>
+      <p>
+        Tenemos que elegir hotel en Hanoi para las noches del 27 al 30 de septiembre de 2026.
+        Somos 15 personas y necesitamos 8 habitaciones. Revisa los enlaces de cada hotel,
+        mira fotos, ubicación, precio y opiniones, y puntúa cada opción del 1 al 10.
+        Al final se generará una lista con todos los hoteles puntuados.
+      </p>
+    </div>
+  </header>
+
+  <main>
+    <form id="hotelForm">
+      <section>
+        <label for="nombre">Tu nombre *</label>
+        <input id="nombre" name="nombre" type="text" autocomplete="name" required>
+        <p class="helper">El voto se preparará como mensaje de WhatsApp para que puedas enviarlo fácilmente.</p>
+      </section>
+
+      <div id="hoteles"></div>
+
+      <section>
+        <h2>Resumen final</h2>
+
+        <label for="favorito">Hotel favorito opcional para desempate</label>
+        <select id="favorito">
+          <option value="">Sin favorito</option>
+        </select>
+
+        <label for="comentarios">Comentarios, dudas o preferencias de habitación</label>
+        <textarea id="comentarios"></textarea>
+
+        <div class="actions">
+          <button type="submit">Enviar voto por WhatsApp</button>
+          <button class="secondary" type="button" id="copiarResumen">Copiar resumen</button>
+        </div>
+
+        <p id="error" class="error">Revisa que has puesto tu nombre.</p>
+      </section>
+    </form>
+
+    <section id="summary" class="summary" aria-live="polite"></section>
+  </main>
+
+  <script>
+    const hoteles = [
+      {
+        nombre: "Sunline Paon Hotel",
+        enlaces: [
+          ["Booking", "https://www.booking.com/hotel/vn/sunline-paon.es.html"]
+        ]
+      },
+      {
+        nombre: "Luxe Paradise Suites & Spa",
+        enlaces: [
+          ["Booking", "https://www.booking.com/hotel/vn/luxe-paradise-suites-amp-spa.es.html#map_closed"]
+        ]
+      },
+      {
+        nombre: "MK Premier Boutique Hotel",
+        enlaces: [
+          ["Trip.com", "https://es.trip.com/hotels/Hanói-hotel-detail-3916860/MK-Premier-Boutique-Hotel/?locale=es-ES&fromfavorites=1&tid=H0011_10650019167&checkin=2026-09-27&checkout=2026-09-30&display=exavg&crn=8&adult=15&children=0&curr=EUR"]
+        ]
+      },
+      {
+        nombre: "Hotel Nostalgia",
+        enlaces: [
+          ["Trip.com", "https://es.trip.com/hotels/detail/?cityEnName=Hanoi&cityId=286&hotelId=11873229&checkIn=2026-09-27&checkOut=2026-09-30&adult=15&children=0&crn=8&ages=&curr=EUR&barcurr=EUR&hoteluniquekey=H4sIAAAAAAAA_-OazcLFJMEvNYWF49yfw7tZhBgNNO6yWfwWdOS6vrjA1q7YwdPjYZWIXtoBhwCeiNVdJ08wJ0r5sxTK3RN2KGQAgYRJDl2MrGCZGYxnr19h3ci4Q671dWBFv8MORqYDjGwnGNUWMJ3e-pn1FAsrR0eSBMslli9M0dVK2amVSlYmOkolmSU5qUpWSiGJxYkKKakKxalFZZnJmflKOkopqcXJQBkgKzE3vzSvBMg2MdOzMAAKlCRWeKYoWZnrKCUn5iSX5iSWpIZUFgDNMdNRyix2LinKLAhKzc0sKUkFqkpLzClOBYkHpRYDZZLBgkp-QGOKoAKZ-XkQ7QYoYmGJOaWpEBcALXRLhdphXKuD6X7PMEfsTja30DM3QjjZhNpONiTGyYa1sY9YmKJjX7DcZfvEwvCLhYXDVoKpiZWhi5WFw06CZRIrG8edTWwSLLtY2SyCo8KMTS6wGkrJGxoYGJgaGpua6hokWhqbW5ik6ZpYmhgYGOqampsamWj8PDaz66GxkbUUJAUoMGoJxod4ugYbmhkU5lSV5RdbVKUbMJ5ilDI0B2o2MDM0NLEwMdYzM0q0CHMMDQ_zL0_3YA5ic3UxNDU2iLLhYg7zcxHkeKWTcuiDgb0Us2tokGLG5lfFW1kVHLRAcoYwucDXj8ykDtz-ZB8Jk09iTS3WdQ3O6BIr4Ohi5BZg9GCMYKxgbGBkXMXIsIGRcQfjfxhgfMUIMhoA1mDrxv0CAAA&masterhotelid_tracelogid=100051355-0a93784f-494001-57524&detailFilters=17%7C1%7E17%7E1*31%7C11873229%7E31%7E11873229*80%7C0%7C0%7E80%7E0*29%7C1%7E29%7E1%7C15&display=exavg&subStamp=630&isCT=true&isFlexible=F&locale=es-ES"]
+        ]
+      },
+      {
+        nombre: "Scent Premium Hotel & Sky Bar",
+        enlaces: [
+          ["Trip.com", "https://es.trip.com/hotels/detail/?cityEnName=Hanoi&cityId=286&hotelId=101972022&checkIn=2026-09-27&checkOut=2026-09-30&adult=15&children=0&crn=8&ages=&curr=EUR&barcurr=EUR&hoteluniquekey=H4sIAAAAAAAA_-N6ysTFJMEvdY-Jo6_7zis2IUYDi9-CjtUi69wfXqty8Dx75swZnyNHHQJ4IlZ3nTzBnCjlz1Iod0_YoZABBC69dmhkBKndlf7MoYuRFaxmBuO2D-cNNjIe_qoR02_U5bCDkekAI9sJRrMFTAeXtTqcYmHleBAowXKJZStjdLVSdmqlkpWJjlJJZklOqpKVkmeYo5KOUkpqcTKQA2Ql5uaX5pUA2YYGJnpmJkCRksQKzxSwnuTEnOTSnMSS1JDKAqBeMx2lzGLnkqLMgqDU3MySklSgqrTEnOJUkHhQajFQJhksqOQHNKYIKpCZnwfRbogiFpaYU5oKcQLQQrdUqB2GtbGPWJiiYz-xMPxiYeOY9ZxRgqWJlaGLlYXDToJlEisrR1euBNMuVq4QA9MAtwhdD13DC6z3mKTkDQ0MDEwNjU1NdQ0SLRONTQzMdU0sTQwMDHVNLQ3NLDX-_J7b9dDYyFoKEogKjFqC8SGersGGZgaFOVVl-cUWVekGjKcYpQzNzS1MDMwMDU0sTIz1zIwSLcIcQ8PD_MvTPZiD2JyN3SxdDaNsuJjD_FwEOV7ppBz6YGAvxewaGqSYsflV8VZWBQctkJwhTC7w9SMzqQO3P9lHwuSTWFOLdV2DM7rECji6GLkFGD0YIxgrGBsYGVcxsnMxGxgZCTBtYGTcwfgfBhhfMYJsAABbNr7kTgIAAA&masterhotelid_tracelogid=100051355-0a9a3407-494001-59169&detailFilters=17%7C1%7E17%7E1*31%7C101972022%7E31%7E101972022*80%7C0%7C0%7E80%7E0*29%7C1%7E29%7E1%7C15&display=exavg&subStamp=1540&isCT=true&isFlexible=F&locale=es-ES"]
+        ]
+      },
+      {
+        nombre: "Peridot Gallery Classic Hotel",
+        enlaces: [
+          ["Trip.com", "https://es.trip.com/hotels/Hanói-hotel-detail-2636170/Peridot-Gallery-Classic-Hotel/?locale=es-ES&fromfavorites=1&tid=H0011_10650019167&checkin=2026-09-27&checkout=2026-09-30&display=exavg&crn=8&adult=15&children=0&curr=EUR"]
+        ]
+      },
+      {
+        nombre: "Proverb Hotel Hanoi",
+        enlaces: [
+          ["Trip.com", "https://es.trip.com/hotels/Hanói-hotel-detail-131762512/Proverb-Hotel-Hanoi/?locale=es-ES&fromfavorites=1&tid=H0011_10650019167&checkin=2026-09-27&checkout=2026-09-30&display=exavg&crn=8&adult=15&children=0&curr=EUR"]
+        ]
+      }
+    ];
+
+    const hotelesContainer = document.getElementById("hoteles");
+    const favoritoSelect = document.getElementById("favorito");
+    const summary = document.getElementById("summary");
+
+    hoteles.forEach((hotel, index) => {
+      const hotelId = `hotel_${index}`;
+      const section = document.createElement("section");
+      const links = hotel.enlaces.map(([plataforma, url]) => (
+        `<a class="link-button" href="${url}" target="_blank" rel="noopener noreferrer">${plataforma}: abrir enlace</a>`
+      )).join("");
+
+      section.innerHTML = `
+        <h2>${index + 1}. ${hotel.nombre}</h2>
+        <div class="links">${links}</div>
+        <p class="note">Abre el enlace para ver fotos, precio actualizado, ubicación y opiniones.</p>
+        <label for="${hotelId}">¿Qué puntuación le das a este hotel? *</label>
+        <div class="score-row">
+          <input id="${hotelId}" name="${hotelId}" type="range" min="1" max="10" value="5" required>
+          <span id="${hotelId}_value" class="score-value">5</span>
+        </div>
+        <div class="scale-labels">
+          <span>No me gusta nada</span>
+          <span>Me encanta</span>
+        </div>
+      `;
+
+      hotelesContainer.appendChild(section);
+
+      document.getElementById(hotelId).addEventListener("input", function () {
+        document.getElementById(`${hotelId}_value`).textContent = this.value;
+      });
+
+      const option = document.createElement("option");
+      option.value = hotel.nombre;
+      option.textContent = hotel.nombre;
+      favoritoSelect.appendChild(option);
+    });
+
+    function construirResumen() {
+      const nombre = document.getElementById("nombre").value.trim();
+      const favorito = document.getElementById("favorito").value;
+      const comentarios = document.getElementById("comentarios").value.trim();
+
+      let mensaje = "Votación hoteles Hanoi - Viaje Vietnam 2026\n\n";
+      mensaje += `Nombre: ${nombre}\n\n`;
+      mensaje += "Puntuaciones:\n";
+
+      hoteles.forEach((hotel, index) => {
+        const puntuacion = document.getElementById(`hotel_${index}`).value;
+        mensaje += `${hotel.nombre}: ${puntuacion}/10\n`;
+      });
+
+      if (favorito) {
+        mensaje += `\nFavorito opcional para desempate: ${favorito}\n`;
+      }
+
+      if (comentarios) {
+        mensaje += `\nComentarios: ${comentarios}\n`;
+      }
+
+      return mensaje;
+    }
+
+    function validarFormulario() {
+      const nombre = document.getElementById("nombre").value.trim();
+      const error = document.getElementById("error");
+      const valido = Boolean(nombre);
+
+      error.style.display = valido ? "none" : "block";
+      return valido;
+    }
+
+    document.getElementById("hotelForm").addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      if (!validarFormulario()) {
+        return;
+      }
+
+      const mensaje = construirResumen();
+      summary.textContent = mensaje;
+      summary.style.display = "block";
+      window.open(`https://wa.me/?text=${encodeURIComponent(mensaje)}`, "_blank");
+    });
+
+    document.getElementById("copiarResumen").addEventListener("click", async function () {
+      if (!validarFormulario()) {
+        return;
+      }
+
+      const mensaje = construirResumen();
+      summary.textContent = mensaje;
+      summary.style.display = "block";
+
+      try {
+        await navigator.clipboard.writeText(mensaje);
+        this.textContent = "Resumen copiado";
+        setTimeout(() => {
+          this.textContent = "Copiar resumen";
+        }, 1800);
+      } catch (error) {
+        this.textContent = "No se pudo copiar";
+        setTimeout(() => {
+          this.textContent = "Copiar resumen";
+        }, 1800);
+      }
+    });
+  </script>
+</body>
+</html>
