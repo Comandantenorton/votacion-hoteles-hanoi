@@ -216,7 +216,7 @@
       <section>
         <label for="nombre">Tu nombre *</label>
         <input id="nombre" name="nombre" type="text" autocomplete="name" required>
-        <p class="helper">El voto se preparará como mensaje de WhatsApp para que puedas enviarlo fácilmente.</p>
+        <p class="helper">El voto se preparará como mensaje de WhatsApp e incluirá un bloque listo para copiar en Excel o Google Sheets.</p>
       </section>
 
       <div id="hoteles"></div>
@@ -234,7 +234,7 @@
 
         <div class="actions">
           <button type="submit">Enviar voto por WhatsApp</button>
-          <button class="secondary" type="button" id="copiarResumen">Copiar resumen</button>
+          <button class="secondary" type="button" id="copiarResumen">Copiar resumen para Excel</button>
         </div>
 
         <p id="error" class="error">Revisa que has puesto tu nombre.</p>
@@ -337,9 +337,12 @@
       mensaje += `Nombre: ${nombre}\n\n`;
       mensaje += "Puntuaciones:\n";
 
+      const filasExcel = ["Nombre;Hotel;Puntuación"];
+
       hoteles.forEach((hotel, index) => {
         const puntuacion = document.getElementById(`hotel_${index}`).value;
         mensaje += `${hotel.nombre}: ${puntuacion}/10\n`;
+        filasExcel.push(`${nombre};${hotel.nombre};${puntuacion}`);
       });
 
       if (favorito) {
@@ -349,6 +352,9 @@
       if (comentarios) {
         mensaje += `\nComentarios: ${comentarios}\n`;
       }
+
+      mensaje += "\nFormato Excel/Sheets:\n";
+      mensaje += filasExcel.join("\n");
 
       return mensaje;
     }
@@ -388,12 +394,12 @@
         await navigator.clipboard.writeText(mensaje);
         this.textContent = "Resumen copiado";
         setTimeout(() => {
-          this.textContent = "Copiar resumen";
+          this.textContent = "Copiar resumen para Excel";
         }, 1800);
       } catch (error) {
         this.textContent = "No se pudo copiar";
         setTimeout(() => {
-          this.textContent = "Copiar resumen";
+          this.textContent = "Copiar resumen para Excel";
         }, 1800);
       }
     });
